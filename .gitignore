@@ -1,0 +1,6 @@
+.idea/**
+*.iml
+*.jar
+target/**
+recentGarminDomain.json
+LoginConnectorTest2.java
