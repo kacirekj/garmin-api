@@ -21,8 +21,8 @@ public class GarminSession implements Serializable {
         return JsonUtil.getMapper().readValue(json, GarminSession.class);
     }
     
-    public String toJson(GarminSession garminSession) throws JsonProcessingException {
-        return JsonUtil.getMapper().writeValueAsString(garminSession);
+    public String toJson() throws JsonProcessingException {
+        return JsonUtil.getMapper().writeValueAsString(this);
     }
     
     @JsonIgnore
@@ -52,5 +52,29 @@ public class GarminSession implements Serializable {
     
     public void setSocialProfile(Map<String, Object> socialProfile) {
         this.socialProfile = socialProfile;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GarminSession that = (GarminSession) o;
+        return Objects.equals(session, that.session) &&
+                Objects.equals(userPreferences, that.userPreferences) &&
+                Objects.equals(socialProfile, that.socialProfile);
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(session, userPreferences, socialProfile);
+    }
+    
+    @Override
+    public String toString() {
+        return "GarminSession{" +
+                "session=" + session +
+                ", userPreferences=" + userPreferences +
+                ", socialProfile=" + socialProfile +
+                '}';
     }
 }

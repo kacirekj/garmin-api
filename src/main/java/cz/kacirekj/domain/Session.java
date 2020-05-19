@@ -6,6 +6,7 @@ import org.apache.http.client.*;
 import org.apache.http.cookie.*;
 
 import java.time.*;
+import java.util.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Session {
@@ -39,5 +40,29 @@ public class Session {
     public void setCookieStore(CookieStore cookieStore) {
         this.cookieStore = new SessionCookieStore();
         this.cookieStore.setCookies(cookieStore.getCookies().toArray(new Cookie[0]));
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Session session = (Session) o;
+        return Objects.equals(sessionCreationDateTime, session.sessionCreationDateTime) &&
+                Objects.equals(userDisplayName, session.userDisplayName) &&
+                Objects.equals(cookieStore, session.cookieStore);
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(sessionCreationDateTime, userDisplayName, cookieStore);
+    }
+    
+    @Override
+    public String toString() {
+        return "Session{" +
+                "sessionCreationDateTime=" + sessionCreationDateTime +
+                ", userDisplayName='" + userDisplayName + '\'' +
+                ", cookieStore=" + cookieStore +
+                '}';
     }
 }

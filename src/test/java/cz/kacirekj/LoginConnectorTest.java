@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 @Ignore
-public class LoginConnectorTest2 {
+public class LoginConnectorTest {
     String garminUserJson;
     ObjectMapper objectMapper = JsonUtil.getMapper();
     
@@ -38,21 +38,27 @@ public class LoginConnectorTest2 {
         } catch (Exception e) {
             LoginConnector loginConnector1 = new LoginConnector();
             GarminSession garminSession = loginConnector1.login(email, password);
-            garminUserJson = objectMapper.writeValueAsString(garminSession);
+            garminUserJson = garminSession.toJson();
             FileUtil.setFileContent(filePath, garminUserJson);
+            
         }
     }
     
     @Test
     public void shallReturnStatsWithLongTimeDeserializedCookieStore() throws IOException, InterruptedException {
-        GarminSession garminSession = objectMapper.readValue(garminUserJson, GarminSession.class);
+        GarminSession garminSession = GarminSession.createFromJson(garminUserJson);
         DataConnector dataConnector = new DataConnector(garminSession);
+        
+        System.out.println(garminSession);
         
         int count = 0;
         while(true) {
             try {
                 Map<String,Object> stats = dataConnector.getHeartRates(LocalDate.now().minusDays(1));
                 System.out.println(stats);
+                stats = dataConnector.getUserSummary(LocalDate.now().minusDays(1));
+                System.out.println(stats);
+    
             } catch(Exception e) {
                 System.out.println(e.getMessage());
                 break;
